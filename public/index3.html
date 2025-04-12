@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Arena - Pesquisa de Vídeos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #ffcc00;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #ffcc00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #e6b800;
+        }
+        .video-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+        .video {
+            width: 400px;
+            margin: 20px;
+            border: 1px solid #ffcc00;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #333333;
+        }
+        iframe {
+            width: 100%;
+            height: 315px;
+        }
+
+        .decklist {
+            text-align: left;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Pesquisa de Vídeos de Magic</h1>
+    <input type="text" id="searchInput" placeholder="Digite o nome da carta...">
+    <button onclick="searchVideos()">Pesquisar</button>
+    <div id="videoList" class="video-container"></div>
+
+    <script>
+        function searchVideos() {
+            const searchInput = document.getElementById('searchInput').value;
+            const videoList = document.getElementById('videoList');
+            videoList.innerHTML = ''; // Limpa a lista antes de adicionar novos vídeos
+
+            // Exemplo de dados (substitua isso pela sua lógica de busca)
+            const videos = [
+                {
+                    linkyoutube: "https://www.youtube.com/embed/xJXPzbWmcmo",
+                    canal: "umotivo",
+                    cartaPesquisada: "Manipulador do Crepúsculo",
+                    decklist: "4 Manipulador do Crepúsculo (KHM) 91;2 Abala‑terra (KHM) 145;2 Valquíria Erradicadora (KHM) 94;4 Vingadora de Skemfar (KHM) 109;4 Amoque Draconeo (KHM) 131;2 Arni Testa Partida (KHM) 120;4 O Massacre do Céu Sangrento (KHM) 207;2 Brasolâmina (ELD) 120;4 Sede de Grão-vampiro (ZNR) 94;2 Ato Cruel (IKO) 91;2 Libertador Destemido (KHM) 135;2 Dragão da Ponte Dourada (KHM) 139;7 Pântano (UST) 214;7 Montanha (UST) 215;2 Despertar de Agadeem (ZNR) 90;2 Esmagamento de Quebra‑crânio (ZNR) 161;4 Senda do Passo Ruinoso (KHM) 252;2 Ressuscitar os Draugr (KHM) 105;2 Rankle, Mestre das Peças (ELD) 101;"
+                },
+                {
+                    linkyoutube: "https://www.youtube.com/embed/xJXPzbWmcmo",
+                    canal: "umotivo",
+                    cartaPesquisada: "Manipulador do Crepúsculo",
+                    decklist: "4 Manipulador do Crepúsculo (KHM) 91;2 Abala‑terra (KHM) 145;2 Valquíria Erradicadora (KHM) 94;4 Vingadora de Skemfar (KHM) 109;4 Amoque Draconeo (KHM) 131;2 Arni Testa Partida (KHM) 120;4 O Massacre do Céu Sangrento (KHM) 207;2 Brasolâmina (ELD) 120;4 Sede de Grão-vampiro (ZNR) 94;2 Ato Cruel (IKO) 91;2 Libertador Destemido (KHM) 135;2 Dragão da Ponte Dourada (KHM) 139;7 Pântano (UST) 214;7 Montanha (UST) 215;2 Despertar de Agadeem (ZNR) 90;2 Esmagamento de Quebra‑crânio (ZNR) 161;4 Senda do Passo Ruinoso (KHM) 252;2 Ressuscitar os Draugr (KHM) 105;2 Rankle, Mestre das Peças (ELD) 101;"
+                },
+                {
+                    linkyoutube: "https://www.youtube.com/embed/xJXPzbWmcmo",
+                    canal: "umotivo",
+                    cartaPesquisada: "Manipulador do Crepúsculo",
+                    decklist: "4 Manipulador do Crepúsculo (KHM) 91;2 Abala‑terra (KHM) 145;2 Valquíria Erradicadora (KHM) 94;4 Vingadora de Skemfar (KHM) 109;4 Amoque Draconeo (KHM) 131;2 Arni Testa Partida (KHM) 120;4 O Massacre do Céu Sangrento (KHM) 207;2 Brasolâmina (ELD) 120;4 Sede de Grão-vampiro (ZNR) 94;2 Ato Cruel (IKO) 91;2 Libertador Destemido (KHM) 135;2 Dragão da Ponte Dourada (KHM) 139;7 Pântano (UST) 214;7 Montanha (UST) 215;2 Despertar de Agadeem (ZNR) 90;2 Esmagamento de Quebra‑crânio (ZNR) 161;4 Senda do Passo Ruinoso (KHM) 252;2 Ressuscitar os Draugr (KHM) 105;2 Rankle, Mestre das Peças (ELD) 101;"
+                },
+                {
+                    linkyoutube: "https://www.youtube.com/embed/xJXPzbWmcmo",
+                    canal: "umotivo",
+                    cartaPesquisada: "Manipulador do Crepúsculo",
+                    decklist: "4 Manipulador do Crepúsculo (KHM) 91;2 Abala‑terra (KHM) 145;2 Valquíria Erradicadora (KHM) 94;4 Vingadora de Skemfar (KHM) 109;4 Amoque Draconeo (KHM) 131;2 Arni Testa Partida (KHM) 120;4 O Massacre do Céu Sangrento (KHM) 207;2 Brasolâmina (ELD) 120;4 Sede de Grão-vampiro (ZNR) 94;2 Ato Cruel (IKO) 91;2 Libertador Destemido (KHM) 135;2 Dragão da Ponte Dourada (KHM) 139;7 Pântano (UST) 214;7 Montanha (UST) 215;2 Despertar de Agadeem (ZNR) 90;2 Esmagamento de Quebra‑crânio (ZNR) 161;4 Senda do Passo Ruinoso (KHM) 252;2 Ressuscitar os Draugr (KHM) 105;2 Rankle, Mestre das Peças (ELD) 101;"
+                },
+            ];
+
+            // Filtra os vídeos com base na pesquisa
+            const filteredVideos = videos.filter(video => video.cartaPesquisada.toLowerCase().includes(searchInput.toLowerCase()));
+
+
+            // Adiciona os vídeos filtrados à lista
+            filteredVideos.forEach(video => {
+                const cartasDeck = video.decklist.split(";");
+                const videoElement = document.createElement('div');
+                videoElement.className = 'video';
+                videoElement.innerHTML = `
+                    <h3>${video.cartaPesquisada}</h3>
+                    <p>Canal: ${video.canal}</p>
+                    <iframe src="${video.linkyoutube}" frameborder="0" allowfullscreen></iframe>
+                    <p class="decklist">Deck</p>
+                    <p class="decklist">
+                        ${cartasDeck.map(carta => `${carta}<br>`).join('')}
+                    </p>
+                `;
+                videoList.appendChild(videoElement);
+            });
+
+            if (filteredVideos.length === 0) {
+                videoList.innerHTML = '<p>Nenhum vídeo encontrado.</p>';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #1e1e2f, #2c2c3a);
+  color: #f0f0f0;
+}
+
+header {
+  text-align: center;
+  padding: 2rem;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url('https://rosybrown-eagle-401041.hostingersite.com/banner.jpg') no-repeat center center;
+  background-size: cover;
+  color: #fff;
+}
+
+header h1 {
+  font-size: 3rem;
+  text-shadow: 2px 2px #000;
+}
+
+.search-container {
+  text-align: center;
+  margin: 2rem;
+  position: relative;
+}
+
+input[type="text"] {
+  padding: 1rem;
+  width: 500px;
+  max-width: 500px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+}
+
+.search-container button {
+  padding: 16px 0px;
+  margin-left: 1rem;
+  border: none;
+  background-color: #ffb300;
+  color: #000;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100px;
+}
+
+.autocomplete-results {
+  display: none;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  z-index: 1000;
+  background-color: white;
+  width: 500px;
+  left: calc(50% - 312px);
+  max-width: 500px;
+  margin-top: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.autocomplete-item {
+  padding: 10px;
+  cursor: pointer;
+  color: #000;
+}
+
+.autocomplete-item:hover {
+  background-color: #f0f0f0;
+}
+
+.copiar-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.results {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.video-card {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px;
+  background: #292942;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.video-card h3 {
+  margin-top: 0;
+}
+
+iframe {
+  width: 100%;
+  height: 400px;
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.decklist {
+  background-color: #1c1c2e;
+  padding: 1rem;
+  border-radius: 8px;
+  white-space: pre-line;
+  font-family: monospace;
+  position: relative;
+  max-height: 200px;
+  overflow: hidden; 
+  transition: max-height 0.3s ease; 
+  overflow: auto; 
+  scrollbar-width: thin; 
+  scrollbar-color: #ffb300 #1c1c2e;
+
+}
+
+.decklist::-webkit-scrollbar {
+  width: 8px; 
+}
+
+.decklist::-webkit-scrollbar-thumb {
+  background-color: #ffb300; 
+  border-radius: 10px; 
+}
+
+.decklist::-webkit-scrollbar-track {
+  background: #1c1c2e; 
+}
+
+.loading {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.spinner {
+  border: 8px solid rgba(255, 255, 255, 0.3);
+  border-top: 8px solid #ffb300;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.pagination a {
+  display: inline-block;
+  padding: 10px 15px;
+  margin: 5px;
+  background-color: #ffb300;
+  color: #000;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.pagination {
+    justify-self: center;
+    margin-bottom: 80px;
+}
+
+.pagination a:hover {
+  background-color: #e0a800;
+  transform: scale(1.05);
+}
+
+.pagination a.active {
+  background-color: #d69f00;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 40px;
+  }
+
+  .autocomplete-results {
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    width: 100%;
+    left: 0;
+    max-width: 500px;
+    margin: 0; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .video-card {
+    width: 90%;
+  }
+
+  .search-container {
+    text-align: center;
+    margin: 16px;
+  }
+
+  .search-container input[type="text"] {
+    width: 60%;
+  }
+
+  .search-container button {
+    padding: 16px ;
+    margin: 0;
+    border: none;
+    background-color: #ffb300;
+    color: #000;
+    font-weight: bold;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .results {
+    padding: 0px;
+  }
+}

@@ -81,7 +81,7 @@ $totalPaginas = ceil($totalDecks / 6);
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Magic Arena - Vídeos de Decks</title>
   <link rel="icon" href="https://rosybrown-eagle-401041.hostingersite.com/logo.png" type="image/x-icon">
-  <link rel="stylesheet" href="style.css?1">
+  <link rel="stylesheet" href="style.css?2">
   <meta property="og:title" content="Magic Arena - Vídeos de Decks">
   <meta property="og:description" content="Consulte gameplay de decks pesquisando pela carta no Magic Arena.">
   <meta property="og:image" content="https://rosybrown-eagle-401041.hostingersite.com/logo.png">
@@ -207,6 +207,7 @@ $totalPaginas = ceil($totalDecks / 6);
           document.getElementById('searchInput').value = nome;
           document.getElementById('searchInputEn').value = decodeHtml(card.sNomeIdiomaSecundario); 
           resultsContainer.innerHTML = '';
+          buscarCarta();
         });
         resultsContainer.appendChild(item);
       });

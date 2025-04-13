@@ -21,14 +21,22 @@ function getDecksBase($termoEn, $canal) {
 
 function getDecks($termo, $termoEn, $canal, $pagina = 1, $itensPorPagina = 6) {
   $db = new SQLite3('../Decks.db');
+
+  $offset = ($pagina - 1) * $itensPorPagina;
+
   if ($termo === '') {
     $wherequery = "";
     if ($canal !== 'TODOS') {
       $wherequery = " WHERE LOWER(YoutubeChannel) = :canal ";
     }
-    $stmt = $db->prepare("SELECT *, :cartaPesquisada as cartaPesquisada FROM Decks $wherequery ORDER BY DataPublish DESC LIMIT :itensPorPagina");
+
+$stmt = $db->prepare("SELECT *, :cartaPesquisada as cartaPesquisada FROM Decks $wherequery ORDER BY DataPublish DESC LIMIT :offset, :itensPorPagina");
+
     $stmt->bindValue(':cartaPesquisada', $termo, SQLITE3_TEXT);
     $stmt->bindValue(':itensPorPagina', $itensPorPagina, SQLITE3_INTEGER);
+
+  $stmt->bindValue(':offset', $offset, SQLITE3_INTEGER);
+
     if ($canal !== 'TODOS') {
       $stmt->bindValue(':canal', strtolower($canal), SQLITE3_TEXT);
     }
@@ -42,7 +50,6 @@ function getDecks($termo, $termoEn, $canal, $pagina = 1, $itensPorPagina = 6) {
     return $videos;
   }
   
-  $offset = ($pagina - 1) * $itensPorPagina;
   $wherequery = getDecksBase($termoEn, $canal);
   
   $orderBy = " ORDER BY DataPublish DESC LIMIT :offset, :itensPorPagina ";
@@ -173,15 +180,15 @@ $totalPaginas = ceil($totalDecks / 6);
     <?php endif; ?>
   </div>
 
-  <div class="pagination">
-    <?php if ($pagina > 1): ?>
-        <a href="?termo=<?= urlencode($termo) ?>&pagina=<?= $pagina - 1 ?>" class="prev">Anterior</a>
-    <?php endif; ?>
+<div class="pagination">
+  <?php if ($pagina > 1): ?>
+      <a href="?termo=<?= urlencode($termo) ?>&termoEn=<?= urlencode($termoEn) ?>&canal=<?= urlencode($canal) ?>&pagina=<?= $pagina - 1 ?>" class="prev">Anterior</a>
+  <?php endif; ?>
 
-    <?php if ($pagina < $totalPaginas): ?>
-        <a href="?termo=<?= urlencode($termo) ?>&pagina=<?= $pagina + 1 ?>" class="next">Próximo</a>
-    <?php endif; ?>
-  </div>
+  <?php if ($pagina < $totalPaginas): ?>
+      <a href="?termo=<?= urlencode($termo) ?>&termoEn=<?= urlencode($termoEn) ?>&canal=<?= urlencode($canal) ?>&pagina=<?= $pagina + 1 ?>" class="next">Próximo</a>
+  <?php endif; ?>
+</div>
 
   <script>
 

@@ -119,7 +119,7 @@ $totalPaginas = ceil($totalDecks / 6);
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Magic Arena - Vídeos de Decks</title>
   <link rel="icon" href="https://rosybrown-eagle-401041.hostingersite.com/logo.png" type="image/x-icon">
-  <link rel="stylesheet" href="style.css?3">
+  <link rel="stylesheet" href="style.css?4">
   <meta property="og:title" content="Magic Arena - Vídeos de Decks">
   <meta property="og:description" content="Consulte gameplay de decks pesquisando pela carta no Magic Arena.">
   <meta property="og:image" content="https://rosybrown-eagle-401041.hostingersite.com/logo.png">
@@ -128,7 +128,7 @@ $totalPaginas = ceil($totalDecks / 6);
 
 <body>
   <header>
-    <h1>Magic Arena - Vídeos de Decks</h1>
+    <h1><a href="/">Magic Arena - Vídeos de Decks</a></h1>
   </header>
   <div class="search-container">
     <input type="text" autocomplete="off" id="searchInput" placeholder="Digite o nome da carta..." value="<?= htmlspecialchars($termo) ?>">
@@ -138,6 +138,7 @@ $totalPaginas = ceil($totalDecks / 6);
         <option value="UMOTIVO" <?= $canal === 'UMOTIVO' ? 'selected' : '' ?>>UMOTIVO</option>
         <option value="MTGABRASIL" <?= $canal === 'MTGABRASIL' ? 'selected' : '' ?>>MTGABRASIL</option>
         <option value="POBREPLANINAUTA" <?= $canal === 'POBREPLANINAUTA' ? 'selected' : '' ?>>POBREPLANINAUTA</option>
+        <option value="BLACKMANAMTG" <?= $canal === 'BLACKMANAMTG' ? 'selected' : '' ?>>BLACKMANAMTG</option>
     </select>
     <input type="hidden" autocomplete="off" id="searchInputEn" value="<?= htmlspecialchars($termoEn) ?>">
     <button onclick="buscarCarta()">Pesquisar</button>

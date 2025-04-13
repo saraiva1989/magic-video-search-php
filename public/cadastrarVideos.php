@@ -85,6 +85,7 @@ if (isset($_POST['deleteVideo'])) {
                     <option value="UMOTIVO">UMOTIVO</option>
                     <option value="MTGABRASIL">MTGABRASIL</option>
                     <option value="POBREPLANINAUTA">POBREPLANINAUTA</option>
+                    <option value="BLACKMANAMTG">BLACKMANAMTG</option>
                     <option value="TODOS">TODOS CANAIS</option>
                 </select>
 

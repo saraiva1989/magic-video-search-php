@@ -1,24 +1,50 @@
 <?php
 
 function convertYoutubeToEmbed($url) {
-  // Extrai o ID do vídeo
   if (preg_match('/v=([^&]+)/', $url, $matches)) {
       return "https://www.youtube.com/embed/" . $matches[1];
   }
   return $url;
 }
 
-function getDecks($termo, $termoEn, $pagina = 1, $itensPorPagina = 6) {
+function getDecksBase($termoEn, $canal) {
+  $wherequery = " WHERE LOWER(DeckList) LIKE :termo ";
+  if($termoEn != '') {
+    $wherequery = "WHERE (LOWER(DeckList) LIKE :termo OR LOWER(DeckList) LIKE :termoEn) ";
+  }
+  if ($canal !== 'TODOS') {
+    $wherequery .= " AND LOWER(YoutubeChannel) = :canal ";
+  }
+
+  return $wherequery;
+}
+
+function getDecks($termo, $termoEn, $canal, $pagina = 1, $itensPorPagina = 6) {
   $db = new SQLite3('../Decks.db');
   if ($termo === '') {
-        return [];
+    $wherequery = "";
+    if ($canal !== 'TODOS') {
+      $wherequery = " WHERE LOWER(YoutubeChannel) = :canal ";
+    }
+    $stmt = $db->prepare("SELECT *, :cartaPesquisada as cartaPesquisada FROM Decks $wherequery ORDER BY DataPublish DESC LIMIT :itensPorPagina");
+    $stmt->bindValue(':cartaPesquisada', $termo, SQLITE3_TEXT);
+    $stmt->bindValue(':itensPorPagina', $itensPorPagina, SQLITE3_INTEGER);
+    if ($canal !== 'TODOS') {
+      $stmt->bindValue(':canal', strtolower($canal), SQLITE3_TEXT);
+    }
+  
+    $result = $stmt->execute();
+    $videos = [];
+    while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+        $row['DataPublish'] = date('d-m-Y', strtotime($row['DataPublish']));
+        $videos[] = $row;
+    }
+    return $videos;
   }
   
   $offset = ($pagina - 1) * $itensPorPagina;
-  $wherequery = " WHERE LOWER(DeckList) LIKE :termo ";
-  if($termoEn != '') {
-    $wherequery = $wherequery . " or LOWER(DeckList) LIKE :termoEn ";
-  }
+  $wherequery = getDecksBase($termoEn, $canal);
+  
   $orderBy = " ORDER BY DataPublish DESC LIMIT :offset, :itensPorPagina ";
 
   $query = " SELECT *, :cartaPesquisada as cartaPesquisada FROM Decks " . $wherequery . " " . $orderBy;
@@ -29,33 +55,39 @@ function getDecks($termo, $termoEn, $pagina = 1, $itensPorPagina = 6) {
   $stmt->bindValue(':cartaPesquisada', $termo, SQLITE3_TEXT);
   $stmt->bindValue(':offset', $offset, SQLITE3_INTEGER);
   $stmt->bindValue(':itensPorPagina', $itensPorPagina, SQLITE3_INTEGER);
+  
+  if ($canal !== 'TODOS') {
+    $stmt->bindValue(':canal', strtolower($canal), SQLITE3_TEXT);
+  }
 
   $result = $stmt->execute();
   
   $videos = [];
   while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+      $row['DataPublish'] = date('d-m-Y', strtotime($row['DataPublish']));
       $videos[] = $row;
   }
   
   return $videos;
 }
 
-function contarDecks($termo, $termoEn) {
+function contarDecks($termo, $termoEn, $canal) {
   if ($termo === '') {
-    0;
-    return;
+    $termo = " ";
   }
   $db = new SQLite3('../Decks.db');
-  $wherequery = " WHERE LOWER(DeckList) LIKE :termo ";
-  if($termoEn != '') {
-    $wherequery = $wherequery . " or LOWER(DeckList) LIKE :termoEn ";
-  }
+  $wherequery = getDecksBase($termoEn, $canal);
 
   $query = "SELECT COUNT(1) as total FROM Decks " . $wherequery;
 
   $stmt = $db->prepare($query);
   $stmt->bindValue(':termo', '%' . $termo . '%', SQLITE3_TEXT);
   $stmt->bindValue(':termoEn', '%' . $termoEn . '%', SQLITE3_TEXT);
+  
+  if ($canal !== 'TODOS') {
+    $stmt->bindValue(':canal', strtolower($canal), SQLITE3_TEXT);
+  }
+
   $result = $stmt->execute();
   $row = $result->fetchArray(SQLITE3_ASSOC);
   return $row['total'];
@@ -64,12 +96,11 @@ function contarDecks($termo, $termoEn) {
 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $termo = isset($_GET['termo']) ? strtolower($_GET['termo']) : '';
 $termoEn = isset($_GET['termoEn']) ? strtolower($_GET['termoEn']) : '';
+$canal = isset($_GET['canal']) ? $_GET['canal'] : 'TODOS';
 
-
-$videos = getDecks($termo, $termoEn, $pagina);
-$totalDecks = contarDecks($termo, $termoEn);
+$videos = getDecks($termo, $termoEn, $canal, $pagina);
+$totalDecks = contarDecks($termo, $termoEn, $canal);
 $totalPaginas = ceil($totalDecks / 6);
-
 
 ?>
 
@@ -81,7 +112,7 @@ $totalPaginas = ceil($totalDecks / 6);
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Magic Arena - Vídeos de Decks</title>
   <link rel="icon" href="https://rosybrown-eagle-401041.hostingersite.com/logo.png" type="image/x-icon">
-  <link rel="stylesheet" href="style.css?2">
+  <link rel="stylesheet" href="style.css?3">
   <meta property="og:title" content="Magic Arena - Vídeos de Decks">
   <meta property="og:description" content="Consulte gameplay de decks pesquisando pela carta no Magic Arena.">
   <meta property="og:image" content="https://rosybrown-eagle-401041.hostingersite.com/logo.png">
@@ -94,21 +125,23 @@ $totalPaginas = ceil($totalDecks / 6);
   </header>
   <div class="search-container">
     <input type="text" autocomplete="off" id="searchInput" placeholder="Digite o nome da carta..." value="<?= htmlspecialchars($termo) ?>">
-    <input type="hidden" autocomplete="off" id="searchInputEn" value="<?= htmlspecialchars($termoen) ?>">
-    <button onclick="buscarCarta()">Pesquisar</button>
     <div id="autocompleteResults" class="autocomplete-results"></div>
-
+    <select id="canalSelect" class="canal-select">
+        <option value="TODOS" <?= $canal === 'TODOS' ? 'selected' : '' ?>>TODOS CANAIS</option>
+        <option value="UMOTIVO" <?= $canal === 'UMOTIVO' ? 'selected' : '' ?>>UMOTIVO</option>
+        <option value="MTGABRASIL" <?= $canal === 'MTGABRASIL' ? 'selected' : '' ?>>MTGABRASIL</option>
+        <option value="POBREPLANINAUTA" <?= $canal === 'POBREPLANINAUTA' ? 'selected' : '' ?>>POBREPLANINAUTA</option>
+    </select>
+    <input type="hidden" autocomplete="off" id="searchInputEn" value="<?= htmlspecialchars($termoEn) ?>">
+    <button onclick="buscarCarta()">Pesquisar</button>
   </div>
-
 
   <div class="loading" id="loading">
     <div class="spinner"></div>
   </div>
 
   <div class="results" id="results">
-    <?php if (empty($termo)): ?>
-    <p>informe uma carta para pesquisa!</p>
-    <?php elseif (empty($videos)): ?>
+    <?php if (empty($videos)): ?>
     <p>Nenhum vídeo encontrado para essa carta.</p>
     <?php else: ?>
     <?php foreach ($videos as $video): ?>
@@ -125,6 +158,7 @@ $totalPaginas = ceil($totalDecks / 6);
       <p><strong>Canal:</strong>
         <?= htmlspecialchars(strtoupper($video['YoutubeChannel'])) ?>
       </p>
+      <p><strong>Data de Publicação:</strong> <?= htmlspecialchars($video['DataPublish']) ?></p>
       <div class="decklist">
         <?php  
               foreach ($listaCartas as $carta) {
@@ -140,11 +174,13 @@ $totalPaginas = ceil($totalDecks / 6);
   </div>
 
   <div class="pagination">
-    <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
-    <a href="?termo=<?= urlencode($termo) ?>&pagina=<?= $i ?>" class="<?= $i === $pagina ? 'active' : '' ?>">
-      <?= $i ?>
-    </a>
-    <?php endfor; ?>
+    <?php if ($pagina > 1): ?>
+        <a href="?termo=<?= urlencode($termo) ?>&pagina=<?= $pagina - 1 ?>" class="prev">Anterior</a>
+    <?php endif; ?>
+
+    <?php if ($pagina < $totalPaginas): ?>
+        <a href="?termo=<?= urlencode($termo) ?>&pagina=<?= $pagina + 1 ?>" class="next">Próximo</a>
+    <?php endif; ?>
   </div>
 
   <script>
@@ -154,9 +190,11 @@ $totalPaginas = ceil($totalDecks / 6);
     function buscarCarta() {
       const termo = document.getElementById("searchInput").value;
       const termoEn = document.getElementById("searchInputEn").value;
+      const canal = document.getElementById("canalSelect").value;
       const url = new URL(window.location.href);
       url.searchParams.set('termo', termo);
       url.searchParams.set('termoEn', termoEn);
+      url.searchParams.set('canal', canal);
       url.searchParams.set('pagina', 1); 
       document.getElementById("loading").style.display = "flex"; 
       window.location.href = url;
@@ -184,7 +222,6 @@ $totalPaginas = ceil($totalDecks / 6);
     });
 
     async function autoCompleteSerach(query) {
-
       if (query.length < 1) {
         document.getElementById('autocompleteResults').style.display = "none";
         document.getElementById('autocompleteResults').innerHTML = '';
@@ -218,6 +255,10 @@ $totalPaginas = ceil($totalDecks / 6);
       txt.innerHTML = html;
       return txt.value;
     }
+
+    document.getElementById("canalSelect").addEventListener("change", function () {
+        buscarCarta();
+    });
 
   </script>
 

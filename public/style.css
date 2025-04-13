@@ -57,7 +57,7 @@ input[type="text"] {
   z-index: 1000;
   background-color: white;
   width: 500px;
-  left: calc(50% - 312px);
+  left: calc(50% - 564px);
   max-width: 500px;
   margin-top: 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -125,7 +125,6 @@ iframe {
   overflow: auto; 
   scrollbar-width: thin; 
   scrollbar-color: #ffb300 #1c1c2e;
-
 }
 
 .decklist::-webkit-scrollbar {
@@ -194,6 +193,56 @@ iframe {
   font-weight: bold;
 }
 
+.canal-select {
+  padding: 1rem;
+  width: 500px;
+  max-width: 100%;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  background-color: #ffffff;
+  color: #000000;
+  cursor: pointer;
+}
+
+.form-container {
+    max-width: 1600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #292942;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.form-container label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.form-container input,
+.form-container select,
+.form-container textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
+.form-container button {
+    background-color: #ffb300;
+    color: #000;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #e0a800;
+}
+
 @media (max-width: 768px) {
   header h1 {
     font-size: 40px;
@@ -223,7 +272,12 @@ iframe {
   }
 
   .search-container input[type="text"] {
-    width: 60%;
+    width: 88%;
+  }
+
+  .canal-select {
+    width: 97%;
+    margin: 16px 0px;
   }
 
   .search-container button {

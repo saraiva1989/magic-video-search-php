@@ -70,7 +70,7 @@ if (isset($_POST['deleteVideo'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cadastrar Vídeos</title>
-    <link rel="stylesheet" href="style.css?3">
+    <link rel="stylesheet" href="style.css?5">
 </head>
 <body>
     <header>

@@ -243,14 +243,44 @@ iframe {
     background-color: #e0a800;
 }
 
-header h1 a {
-  color: white;
+.link-header {
   text-decoration: none;
 }
+
+.magic-header {
+  text-align: center;
+  padding: 4rem;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+              url('site-banner-desk.jpg') no-repeat center center;
+  background-size: cover;
+  color: #fff;
+  border-bottom: 4px solid #ffb300;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.magic-header h1 {
+  font-size: 3rem;
+  text-shadow: 2px 2px #000;
+  transition: transform 0.3s;
+}
+
 
 @media (max-width: 768px) {
   header h1 {
     font-size: 40px;
+  }
+
+  .magic-header h1 {
+    font-size: 30px;
+    padding: 0;
+    margin: 0;
+  }  
+
+  .magic-header {
+    background-position-y: 30%;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                url('site-banner-Mobile.jpg') no-repeat center center;
+    background-size: cover;
   }
 
   .autocomplete-results {
@@ -301,3 +331,4 @@ header h1 a {
     padding: 0px;
   }
 }
+
